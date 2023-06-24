@@ -1,17 +1,14 @@
 defmodule DayOne do
-  def greet(name) do
-    message = "Hello " <> name
-    IO.puts(message)
-  end
-  
   def readlines(filepath) do
-    # a comment
     case File.read(filepath) do
-      {:ok, contents} -> 
-        IO.binread(contents)
+      {:ok, contents} -> contents |> String.split("\n") |> Enum.map(fn x -> case Integer.parse(x) do {num, ""} -> num; :error -> -1 end end) |> Enum.chunk_by(&(&1 < 0)) 
     end
+  end
+
+  def findElf(filepath) do
+    readlines(filepath) |> Enum.max_by(&(Enum.sum(&1))) |> Enum.sum
   end
 end
 
-DayOne.readlines("input.txt")
+IO.puts("#{DayOne.findElf("input.txt")}")
 
